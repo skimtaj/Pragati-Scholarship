@@ -576,24 +576,29 @@
                 </div>
             </div>
 
-
-
             <% if(sourse.scholarship_status.trim()==='Rejected' ) { %>
                 <div class="rejection-reason">
                     <h3><i class="fas fa-exclamation-triangle"></i> Reason for Rejection</h3>
                     <p>
                         <%=sourse.reject_reason%>
                     </p>
-
                 </div>
                 <% } %>
 
-
+                    <% if(sourse.paymnt_status.trim()==='Success' ) { %>
+                        <div class="action-buttons">
+                            <a href="/award-download-letter/<%=sourse._id%>" class="btn btn-success"
+                                id="downloadAwardBtn">
+                                <i class="fas fa-download"></i> Download Award Letter
+                            </a>
+                        </div>
+                        <% } %>
         </div>
-
-
     </main>
 
+
+
+    <!-- Help Modal -->
     <div class="modal" id="helpModal">
         <div class="modal-content">
             <button class="close-modal" id="closeModal">&times;</button>
@@ -645,6 +650,7 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+                // Animation for cards
                 const cards = document.querySelectorAll('.detail-card, .timeline-item');
                 cards.forEach((card, index) => {
                     card.style.opacity = '0';
@@ -657,11 +663,10 @@
                     }, 100);
                 });
 
+                // Help modal functionality
                 const helpBtn = document.getElementById('helpBtn');
                 const helpModal = document.getElementById('helpModal');
                 const closeModal = document.getElementById('closeModal');
-                const downloadBtn = document.getElementById('downloadBtn');
-                const receiptBtn = document.getElementById('receiptBtn');
 
                 if (helpBtn) {
                     helpBtn.addEventListener('click', function () {
@@ -677,13 +682,54 @@
                     });
                 }
 
+                // Download award functionality
+                const downloadAwardBtn = document.getElementById('downloadAwardBtn');
+                const downloadModal = document.getElementById('downloadModal');
+                const closeDownloadModal = document.getElementById('closeDownloadModal');
+                const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
+
+                if (downloadAwardBtn) {
+                    downloadAwardBtn.addEventListener('click', function () {
+                        downloadModal.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                    });
+                }
+
+                if (closeDownloadModal) {
+                    closeDownloadModal.addEventListener('click', function () {
+                        downloadModal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    });
+                }
+
+                if (confirmDownloadBtn) {
+                    confirmDownloadBtn.addEventListener('click', function () {
+                        // Here you would typically make an API call to generate/download the PDF
+                        // For demonstration, we'll simulate a download
+                        const link = document.createElement('a');
+                        link.href = '/path/to/award-letter.pdf'; // Replace with your actual endpoint
+                        link.download = 'Scholarship_Award_Letter_' + '<%=sourse.ApplicationId%>' + '.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                        // Close the modal after download starts
+                        downloadModal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    });
+                }
+
+                // Close modals when clicking outside
                 window.addEventListener('click', function (event) {
                     if (event.target === helpModal) {
                         helpModal.style.display = 'none';
                         document.body.style.overflow = 'auto';
                     }
+                    if (event.target === downloadModal) {
+                        downloadModal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
                 });
-
             });
         </script>
 </body>
