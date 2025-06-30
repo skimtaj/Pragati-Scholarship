@@ -1300,7 +1300,7 @@
 
 
 
-                                                        <% if(candidate.paymnt_status==='Pending' ) {%>
+                                                        <% if(candidate.scholarship_status==='Approved' || candidate.verification==='Verified') {%>
                                                             <button class="btn btn-primary btn-sm"
                                                                 onclick="makePayment('<%=candidate._id%>')">
                                                                 <i class="fas fa-credit-card"></i>
